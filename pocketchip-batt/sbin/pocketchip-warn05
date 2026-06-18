@@ -3,30 +3,30 @@ VOLT=""
 
 if [ ! -f $HOME/.pocketchip-batt/warn05 ] && [ "$(cat /usr/lib/pocketchip-batt/charging)" = "0" ]; then
 
-  while [ -z "$VOLT" ]
-  do
-    VOLT="$(cat /usr/lib/pocketchip-batt/voltage)"
-  done
+  VOLT="$(cat /usr/lib/pocketchip-batt/voltage 2>/dev/null)"
+  # A missing/empty reading must never block this oneshot (it polls every 30s);
+  # default high so an unreadable battery can't trigger a false low warning.
+  [ -z "$VOLT" ] && VOLT=3700
 
   if [ $(echo " $VOLT < 3375" | bc ) -eq 1 ]; then
     DISPLAY=:0 pocket-exit-5
     mkdir -p $HOME/.pocketchip-batt
     touch $HOME/.pocketchip-batt/warn05
   elif [ $(echo " $VOLT < 3400" | bc ) -eq 1 ]; then
-    rm $HOME/.pocketchip-batt/warn05
+    rm -f $HOME/.pocketchip-batt/warn05
   fi
 
 #elif [ -f $HOME/.pocketchip-batt/warn05 ] && [ $(cat /usr/lib/pocketchip-batt/charging) = "1" ]; then
 else
 
-  while [ -z "$VOLT" ]
-  do
-        VOLT="$(cat /usr/lib/pocketchip-batt/voltage)"
-  done
+  VOLT="$(cat /usr/lib/pocketchip-batt/voltage 2>/dev/null)"
+  [ -z "$VOLT" ] && VOLT=3700
 
   if [ $(echo " $VOLT > 3400" | bc ) -eq 1 ]; then
-    rm $HOME/.pocketchip-batt/warn05
+    rm -f $HOME/.pocketchip-batt/warn05
   fi
 
 
 fi
+
+exit 0

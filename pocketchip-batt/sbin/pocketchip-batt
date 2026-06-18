@@ -20,4 +20,10 @@ if [[ -z "$OLD_V" ]]; then
   OLD_V=3700
 fi
 
-echo "($NEW_V + $OLD_V) / 2" | bc > /usr/lib/pocketchip-batt/voltage
+# Never leave voltage empty: if bc fails/produces nothing, the warn pollers would
+# otherwise read an empty value. Write to a temp + validate, then move into place
+# (also avoids the truncate-then-write window the warn readers could catch).
+AVG_V=$(echo "($NEW_V + $OLD_V) / 2" | bc 2>/dev/null)
+[ -z "$AVG_V" ] && AVG_V="$OLD_V"
+printf '%s\n' "$AVG_V" > /usr/lib/pocketchip-batt/voltage.tmp \
+  && mv -f /usr/lib/pocketchip-batt/voltage.tmp /usr/lib/pocketchip-batt/voltage

@@ -1,3 +1,17 @@
+pocketchip-batt (0.4) trixie; urgency=low
+
+  * warn05/warn15: replace the unbounded busy-loop that read voltage with a
+    single read + safe-high default (3700). On an empty/missing voltage file the
+    old `while [ -z "$VOLT" ]` loop never exited, so the oneshot warn services
+    spun until systemd's start-timeout and were marked FAILED.
+  * warn05/warn15 + warn-clean.service: `rm` -> `rm -f` so removing an absent
+    flag file (the common case) no longer fails the unit; added a trailing
+    `exit 0` to the warn scripts.
+  * pocketchip-batt poller: validate the bc result and write voltage atomically
+    (temp + mv) so it never leaves an empty voltage file for the warn readers.
+
+ -- Ben Young <computermouth@proton.me>  Thu, 18 Jun 2026 02:30:00 -0500
+
 pocketchip-batt (0.3) stable; urgency=low
 
   * pocketchip-warn-clean.service now has a proper [Install] section.
