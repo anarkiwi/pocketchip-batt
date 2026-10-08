@@ -1,0 +1,1 @@
+rm_conffile /etc/systemd/system/pocketchip-batt.timer 0.5~ pocketchip-batt

@@ -1,3 +1,18 @@
+pocketchip-batt (0.5) trixie; urgency=medium
+
+  * Replace the 2 s bash/i2cget/bc oneshot timer with a long-running C
+    service that reads /sys/class/power_supply/axp20x-battery, keeps the
+    (sample + average) / 2 voltage average, and rewrites
+    /run/pocketchip-batt/{voltage,charging} only when a value changes.
+    Charger plug/unplug uevents resample the charging state immediately.
+  * /usr/lib/pocketchip-batt/{voltage,charging} are now symlinks into
+    /run/pocketchip-batt, so the readers are unchanged and nothing is
+    written to NAND.
+  * Drop pocketchip-batt.timer; stop and disable it on upgrade.
+  * Add a fake-sysfs test suite run by dh_auto_test; debhelper compat 13.
+
+ -- Josh Bailey <josh@vandervecken.com>  Thu, 08 Oct 2026 23:30:00 +0000
+
 pocketchip-batt (0.4) trixie; urgency=low
 
   * warn05/warn15: replace the unbounded busy-loop that read voltage with a

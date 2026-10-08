@@ -1,14 +1,16 @@
 Source: pocketchip-batt
-Section: unknown
+Section: utils
 Priority: optional
 Maintainer: Ben Young <software@nextthing.co>
-Build-Depends: debhelper (>= 9)
-Standards-Version: 3.9.6
-Homepage: opensource.nextthing.co
-GitHub: https://github.com/nextthingco/pocketchip-batt
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.7.0
+Rules-Requires-Root: no
+Homepage: https://github.com/anarkiwi/pocketchip-batt
 
 Package: pocketchip-batt
-Architecture: all
-Depends: ${misc:Depends}
-Description: A battery monitor service
- Polls the axp209 regularly for a readout on battery information
+Architecture: any
+Depends: init-system-helpers, ${misc:Depends}, ${shlibs:Depends}
+Description: PocketCHIP battery monitor service
+ Publishes the AXP209 battery voltage (averaged, in mV) and charging state
+ from the kernel power_supply class to /run/pocketchip-batt for pocket-home
+ and the low battery warning and shutdown timers.

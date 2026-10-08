@@ -1,9 +1,0 @@
-[Unit]
-Description=poll battery and charging status every 2 seconds
-
-[Timer]
-OnBootSec=2sec
-OnUnitActiveSec=2sec
-
-[Install]
-WantedBy=timers.target

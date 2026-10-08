@@ -1,0 +1,2 @@
+run/pocketchip-batt/charging usr/lib/pocketchip-batt/charging
+run/pocketchip-batt/voltage usr/lib/pocketchip-batt/voltage

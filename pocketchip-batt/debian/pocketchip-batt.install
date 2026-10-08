@@ -1,3 +1,2 @@
 sbin/* /usr/sbin/
 system/* /etc/systemd/system/
-pocketchip-batt/* /usr/lib/pocketchip-batt/

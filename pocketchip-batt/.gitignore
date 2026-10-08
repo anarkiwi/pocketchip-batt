@@ -1,0 +1,10 @@
+/pocketchip-batt
+*.gcda
+*.gcno
+*.gcov
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/files
+debian/pocketchip-batt/
+debian/*.substvars
+debian/*.debhelper*

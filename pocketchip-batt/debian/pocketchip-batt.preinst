@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = upgrade ] && dpkg --compare-versions "$2" lt 0.5~; then
+	if [ -d /run/systemd/system ]; then
+		systemctl stop pocketchip-batt.timer pocketchip-batt.service || true
+	fi
+	systemctl --quiet disable pocketchip-batt.timer 2>/dev/null || true
+	rm -f /usr/lib/pocketchip-batt/voltage.tmp
+fi
+
+#DEBHELPER#

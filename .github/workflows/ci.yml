@@ -1,0 +1,25 @@
+name: ci
+on:
+  push:
+    branches: [master]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:trixie
+      options: --cap-add NET_ADMIN
+    defaults:
+      run:
+        working-directory: pocketchip-batt
+    steps:
+      - run: >-
+          apt-get update && apt-get install -y --no-install-recommends
+          build-essential clang-format debhelper python3-minimal shellcheck
+        working-directory: /
+      - uses: actions/checkout@v4
+      - run: shellcheck test/run-tests.sh debian/*.preinst debian/*.postinst debian/*.prerm debian/*.postrm
+      - run: clang-format --style=LLVM --dry-run --Werror src/*.c
+      - run: make coverage
+      - run: make clean && dpkg-buildpackage -us -uc -b
+      - run: dpkg-deb -c ../pocketchip-batt_*.deb

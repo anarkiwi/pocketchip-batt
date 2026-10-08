@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+configure | abort-upgrade | abort-deconfigure | abort-remove)
+	if deb-systemd-helper --quiet was-enabled pocketchip-batt.service; then
+		deb-systemd-helper enable pocketchip-batt.service >/dev/null || true
+	else
+		deb-systemd-helper update-state pocketchip-batt.service >/dev/null || true
+	fi
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		deb-systemd-invoke restart pocketchip-batt.service >/dev/null || true
+	fi
+	;;
+esac
+
+#DEBHELPER#

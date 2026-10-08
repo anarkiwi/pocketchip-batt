@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+remove)
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+	fi
+	;;
+purge)
+	deb-systemd-helper purge pocketchip-batt.service >/dev/null || true
+	;;
+esac
+
+#DEBHELPER#
